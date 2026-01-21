@@ -11,6 +11,7 @@ public class MainFrame extends JFrame {
     private DefaultListModel<String> listModel;
     private JList<String> logList;
     private ChartPanel chartPanel;
+    private JScrollPane chartScrollPane;
     private Runnable nextstepAction;
 
     public MainFrame(List<Stock> stocks, Runnable onnextStep) {
@@ -25,7 +26,11 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout(10,10));
 
         chartPanel = new ChartPanel(stocks);
-        add(chartPanel, BorderLayout.CENTER);
+        this.chartScrollPane = new JScrollPane(chartPanel);
+        chartScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        chartScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        add(chartScrollPane, BorderLayout.CENTER);
 
         JPanel sidepanel = new JPanel();
         sidepanel.setLayout(new BorderLayout());
@@ -40,8 +45,16 @@ public class MainFrame extends JFrame {
         nextStepButton.setBackground(new Color(119, 168, 119));
 
         nextStepButton.addActionListener(e -> {
+            clearLog();
             nextstepAction.run();
             chartPanel.repaint();
+
+            chartPanel.revalidate();
+
+            SwingUtilities.invokeLater(() -> {
+               JScrollBar horizontal = chartScrollPane.getHorizontalScrollBar();
+               horizontal.setValue(horizontal.getMaximum());
+            });
         });
 
         autogenerate.addActionListener(e -> automatycznedzialanie());
@@ -68,12 +81,22 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(licznik > 0) {
+                    clearLog();
                     nextstepAction.run();
                     chartPanel.repaint();
+
+                    chartPanel.revalidate();
+                    JScrollBar horizontal = chartScrollPane.getHorizontalScrollBar();
+                    horizontal.setValue(horizontal.getMaximum());
+
                     licznik--;
+
+
                 } else timer.stop();
             }
         });
         timer.start();
     }
+
+    public void clearLog() {listModel.clear();}
 }

@@ -7,10 +7,10 @@ import java.util.List;
 
 public class ChartPanel extends JPanel {
     private List<Stock> stocks;
+    private final int xStep = 30;
 
     public ChartPanel(List<Stock> stocks) {
         this.stocks = stocks;
-        this.setPreferredSize(new Dimension(600, 300));
         this.setBackground(Color.WHITE);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
@@ -23,7 +23,16 @@ public class ChartPanel extends JPanel {
 
         if(stocks == null || stocks.isEmpty()) return;
 
-        Color[] colors = {Color.RED, Color.GREEN, Color.ORANGE};
+        int maxPoints = 0;
+        for(Stock s : stocks) maxPoints = Math.max(maxPoints, s.getPriceHistory().size());
+
+        int prefferedWidth = Math.max(600, maxPoints * xStep);
+        if(getPreferredSize().width != prefferedWidth) {
+            setPreferredSize(new Dimension(prefferedWidth, 300));
+            revalidate();
+        }
+
+        Color[] colors = {Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.PINK, Color.YELLOW, Color.GRAY};
         int coloridx = 0;
 
         for(Stock s : stocks) {
@@ -35,14 +44,9 @@ public class ChartPanel extends JPanel {
     private void drawStockLine(Graphics2D g, Stock s, Color color) {
         g.setColor(color);
         List<Double> history = s.getPriceHistory();
-
         if(history.size() < 2) return;
 
-        int witdh = this.getWidth();
-        int height = this.getHeight();
-
-        double xStep = (double) witdh / (Math.max(history.size(), 20));
-
+        int height = this.getHeight() - 20;
         double maxPrice = 0;
         for(double p : history) maxPrice = Math.max(maxPrice, p);
         maxPrice *= 1.1;
@@ -54,6 +58,7 @@ public class ChartPanel extends JPanel {
             int y2 = (int) (height - (history.get(i + 1) / maxPrice * height));
             g.drawLine(x1, y1, x2, y2);
 
+            g.fillOval(x1 - 2, y1 - 2, 4, 4);
         }
     }
 }

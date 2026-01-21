@@ -24,12 +24,34 @@ public class Stock implements Subject {
     public void simulatePriceChange() {
         Random r = new Random();
         int liczba;
-        if(r.nextFloat(1) <= 0.95) {
+        if(r.nextFloat(1) <= 0.45) { // czas zyskow
             System.out.println("Czas dobrej koniunktury");
-        } else {
-            System.out.println("Donald Trump planuje zaatakować kraj!");
             liczba = 10;
-            while()
+            /*
+            while(liczba-- > 0) {
+                this.currentPrice *= (0.959 + (0.1 * new Random().nextDouble()));
+            }
+            */
+            this.currentPrice *= (0.97 + (0.1 * new Random().nextDouble()));
+        } else if(r.nextFloat(1) <= 0.95) { // stagnacja
+            System.out.println("Czas stagnacji");
+            /*
+            liczba = 10;
+            while(liczba-- > 0) {
+                this.currentPrice *= (0.95 + (0.1 * new Random().nextDouble()));
+            }
+             */
+            this.currentPrice *= (0.95 + (0.1 * new Random().nextDouble()));
+        } else { // recesja(mocna)
+            liczba = 10;
+            System.out.println("Czas recesji");
+            /*
+            while(liczba-- > 0) {
+                this.currentPrice *= (0.871 + (0.1 * new Random().nextDouble()));
+            }
+
+             */
+            this.currentPrice *= (0.85 + (0.1 * new Random().nextDouble()));
         }
 
         if(this.currentPrice < 1) this.currentPrice = 1;
