@@ -11,6 +11,7 @@ public class Stock implements Subject {
     private List<Double> priceHistory;
     private List<Observer> observers;
     private Random random;
+    private List<Stock> market = new ArrayList<>();
 
     public Stock(String symbol, double startPrice) {
         this.symbol = symbol;
@@ -19,17 +20,15 @@ public class Stock implements Subject {
         this.priceHistory = new ArrayList<>();
         this.priceHistory.add(startPrice);
         this.priceHistory.add(startPrice);
+        market.add(this);
     }
 
-    /*
     public void dodajdoMarketu() {
         market.add(this);
     }
 
     public int getMarketSize() {return market.size();}
-
-     */
-
+    public List<Stock> getMarket() {return market;}
 
     public void simulatePriceChange() {
         Random r = new Random();
@@ -59,12 +58,11 @@ public class Stock implements Subject {
             while(liczba-- > 0) {
                 this.currentPrice *= (0.871 + (0.1 * new Random().nextDouble()));
             }
-
              */
             this.currentPrice *= (0.867 + (0.1 * new Random().nextDouble()));
         }
 
-        if(this.currentPrice < 1) this.currentPrice = 1;
+        if(this.currentPrice < 0) this.currentPrice = 0;
         this.priceHistory.add(currentPrice);
         notifyObservers();
     }

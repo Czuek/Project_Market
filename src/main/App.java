@@ -16,7 +16,8 @@ public class App {
     public static void main(String[] args) {
         FlatLightLaf.setup();
         AppController controller = new AppController();
-        List<Stock> market = new ArrayList<>();
+
+        Stock sTEST = new Stock("TEST", 0);
 
         Stock s1 = new Stock("AAPL", 100);
         Stock s2 = new Stock("MSFT", 200);
@@ -27,7 +28,7 @@ public class App {
         Stock s7 = new Stock("FB", 140);
         Stock s8 = new Stock("OIL", 160);
 
-        market.add(s1);
+
 
         TradingBot sma = new TradingBot("Bot Powazna Analiza", new SMA_Strategy(), controller);
         TradingBot panic = new TradingBot("Bot Chaosu", new Panic_Strategy(), controller);
@@ -35,12 +36,15 @@ public class App {
         s1.registerObserver(sma);
         s1.registerObserver(panic);
 
-        MainFrame view = new MainFrame(market, () -> {
-            for(Stock s : market) s.generatenewPrice();
+        /*
+        MainFrame view = new MainFrame(stocks, () -> {
+            for(Stock s : stocks) s.generatenewPrice();
         }
         );
 
         controller.setView(view);
+
+         */
     }
 
 }
