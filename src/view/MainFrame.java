@@ -44,6 +44,8 @@ public class MainFrame extends JFrame {
         topPanel.add(dodajSpolke);
         topPanel.add(autogenerate);
 
+        add(topPanel, BorderLayout.NORTH);
+
         nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
         dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
         autogenerate.setFont(new Font("Monospaced", Font.BOLD, 16));

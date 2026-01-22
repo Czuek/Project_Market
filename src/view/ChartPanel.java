@@ -40,7 +40,7 @@ public class ChartPanel extends JPanel {
         int drawHeight = this.getHeight() - MARGIN_BOTTOM;
         g2.setColor(Color.LIGHT_GRAY);
         for(int i = 0; i <= 5; i++) {
-            int y = drawHeight - (int)(i * (drawHeight * 20) / 5.0);
+            int y = drawHeight - (int)(i * (drawHeight - 20) / 5.0);
             g2.drawLine(MARGIN_LEFT, y, getWidth(), y);
             g2.setColor(Color.BLACK);
             g2.drawString(String.format("%.2f", (maxPrice / 5 ) * i), 5,y + 5);

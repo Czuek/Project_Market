@@ -2,6 +2,7 @@ package main;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import controller.AppController;
+import filemanagement.SaveAndLoad;
 import model.Stock;
 import observers.TradingBot;
 import strategies.Panic_Strategy;
@@ -27,7 +28,8 @@ public class App {
             s.registerObserver(panic);
         };
 
-        Stock s1 = new Stock("AAPL", 100);
+        //Stock s1 = new Stock("AAPL", 100);
+        Stock s1 = SaveAndLoad.loadStock("msft_us_d.csv");
         Stock s2 = new Stock("MSFT", 200);
         Stock s3 = new Stock("ALPH", 50);
         Stock s4 = new Stock("TESL", 150);
@@ -38,10 +40,8 @@ public class App {
 
         stocks.add(s1);
         registerBotStock.accept(s1);
-        stocks.add(s2);
-        registerBotStock.accept(s2);
-        stocks.add(s3);
-        registerBotStock.accept(s3);
+
+
 
         MainFrame view = new MainFrame(stocks, () -> {
             for(Stock s : stocks) s.generatenewPrice();
