@@ -22,44 +22,37 @@ public class MainFrame extends JFrame {
         this.logList = new JList<>(listModel);
 
         setTitle("Project Market");
-        setSize(800, 600);
+        setSize(1000, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10,10));
 
         chartPanel = new ChartPanel(stocks);
         this.chartScrollPane = new JScrollPane(chartPanel);
         chartScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        chartScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-
         add(chartScrollPane, BorderLayout.CENTER);
 
-
-
-        JPanel sidepanel = new JPanel();
-        sidepanel.setLayout(new BorderLayout());
-        sidepanel.setPreferredSize(new Dimension(300, 0));
-
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         JButton nextStepButton = new JButton("Generuj nowe wartości");
-        nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
-        nextStepButton.setBackground(new Color(119, 168, 119));
-
         JButton dodajSpolke = new JButton("Dodaj spółkę");
-        dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
-        dodajSpolke.setBackground(new Color(206, 149, 235));
-
-
         JButton autogenerate = new JButton("Automatycznie generuj");
-        autogenerate.setFont(new Font("Monospaced", Font.BOLD, 16));
+
+        nextStepButton.setBackground(new Color(119, 168, 119));
+        dodajSpolke.setBackground(new Color(206, 149, 235));
         autogenerate.setBackground(new Color(66, 209, 192));
 
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.add(nextStepButton);
-        buttonPanel.add(dodajSpolke);
-        buttonPanel.add(autogenerate);
+        topPanel.add(nextStepButton);
+        topPanel.add(dodajSpolke);
+        topPanel.add(autogenerate);
 
-        JPanel logPanel = new JPanel(new BorderLayout());
-        logPanel.setBorder(BorderFactory.createTitledBorder("Decyzje Botów:"));
-        logPanel.add(new JScrollPane(logList), BorderLayout.CENTER);
+        nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
+        dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
+        autogenerate.setFont(new Font("Monospaced", Font.BOLD, 16));
+
+        JScrollPane logScrollPane = new JScrollPane(logList);
+        logScrollPane.setPreferredSize(new Dimension(0, 150));
+        logScrollPane.setBorder(BorderFactory.createTitledBorder("Logi"));
+        add(logScrollPane, BorderLayout.SOUTH);
+
 
         nextStepButton.addActionListener(e -> {
             clearLog();
@@ -76,36 +69,34 @@ public class MainFrame extends JFrame {
 
         dodajSpolke.addActionListener(e -> {
             JPanel panel = new JPanel(new GridLayout(2,2,5,5));
-            String[] etykiety = {"Symbol", "Cena"};
-            JTextField[] pola = new JTextField[2];
-            wypelnijPola(etykiety, pola, panel);
+            JTextField symbolField = new JTextField(10);
+            JTextField priceField = new JTextField(10);
+            panel.add(new JLabel("Symbol:")); panel.add(symbolField);
+            panel.add(new JLabel("Cena:")); panel.add(priceField);
             int wynik = JOptionPane.showConfirmDialog(null, panel, "Dodaj spolke", JOptionPane.OK_CANCEL_OPTION);
 
             if(wynik == JOptionPane.OK_OPTION) {
                 try {
-                    Stock s = new Stock(pola[0].getText(), Double.parseDouble(pola[1].getText()));
+                    String symbol = symbolField.getText();
+                    double price = Double.parseDouble(priceField.getText());
+                    Stock s = new Stock(symbol, price);
+
+                    int currentStep = 0;
+                    for(Stock exist : stocks) {
+                        currentStep = Math.max(currentStep, exist.getPriceHistory().size());
+                    }
+
+                    s.getPriceHistory().clear();
+                    for(int i = 0; i < currentStep-1; i++) s.getPriceHistory().add(null);
+                    s.getPriceHistory().add(price);
                     stocks.add(s);
+                    chartPanel.repaint();
                 } catch(NumberFormatException ex) {
                 }
             }
         });
 
-
-
         autogenerate.addActionListener(e -> automatycznedzialanie());
-
-        JPanel przyciski = new JPanel();
-        przyciski.setVisible(true);
-        przyciski.setLayout(new GridLayout(3,2, 50, 50));
-
-        sidepanel.add(przyciski, BorderLayout.NORTH);
-        przyciski.add(nextStepButton, BorderLayout.NORTH);
-        przyciski.add(dodajSpolke, BorderLayout.CENTER);
-        przyciski.add(autogenerate, BorderLayout.SOUTH);
-
-        sidepanel.add(new JScrollPane(logList), BorderLayout.CENTER);
-        add(sidepanel, BorderLayout.EAST);
-
         setLocationRelativeTo(null);
         setVisible(true);
     }
