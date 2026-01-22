@@ -11,13 +11,21 @@ import com.formdev.flatlaf.FlatDarkLaf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class App {
     public static void main(String[] args) {
         FlatLightLaf.setup();
         AppController controller = new AppController();
+        List<Stock> stocks = new ArrayList<>();
 
-        Stock sTEST = new Stock("TEST", 0);
+        TradingBot sma = new TradingBot("Bot Powazna Analiza", new SMA_Strategy(), controller);
+        TradingBot panic = new TradingBot("Bot Chaosu", new Panic_Strategy(), controller);
+
+        Consumer<Stock> registerBottoStock = (s) -> {
+            s.registerObserver(sma);
+            s.registerObserver(panic);
+        };
 
         Stock s1 = new Stock("AAPL", 100);
         Stock s2 = new Stock("MSFT", 200);
@@ -28,15 +36,13 @@ public class App {
         Stock s7 = new Stock("FB", 140);
         Stock s8 = new Stock("OIL", 160);
 
+        stocks.add(s1);
+        registerBottoStock.accept(s1);
+        stocks.add(s2);
+        registerBottoStock.accept(s2);
+        stocks.add(s3);
+        registerBottoStock.accept(s3);
 
-
-        TradingBot sma = new TradingBot("Bot Powazna Analiza", new SMA_Strategy(), controller);
-        TradingBot panic = new TradingBot("Bot Chaosu", new Panic_Strategy(), controller);
-
-        s1.registerObserver(sma);
-        s1.registerObserver(panic);
-
-        /*
         MainFrame view = new MainFrame(stocks, () -> {
             for(Stock s : stocks) s.generatenewPrice();
         }
@@ -44,7 +50,6 @@ public class App {
 
         controller.setView(view);
 
-         */
     }
 
 }

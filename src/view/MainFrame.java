@@ -37,11 +37,11 @@ public class MainFrame extends JFrame {
         sidepanel.setLayout(new BorderLayout());
         sidepanel.setPreferredSize(new Dimension(300, 0));
 
-        JButton nextStepButton = new JButton("GENERUJ WARTOŚCI");
+        JButton nextStepButton = new JButton("Generuj nowe wartości");
         nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
         nextStepButton.setBackground(new Color(119, 168, 119));
 
-        JButton dodajSpolke = new JButton("Dodaj spolke");
+        JButton dodajSpolke = new JButton("Dodaj spółkę");
         dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
         dodajSpolke.setBackground(new Color(206, 149, 235));
 
@@ -73,7 +73,7 @@ public class MainFrame extends JFrame {
             if(wynik == JOptionPane.OK_OPTION) {
                 try {
                     Stock s = new Stock(pola[0].getText(), Double.parseDouble(pola[1].getText()));
-
+                    stocks.add(s);
                 } catch(NumberFormatException ex) {
                 }
             }
@@ -85,7 +85,7 @@ public class MainFrame extends JFrame {
 
         JPanel przyciski = new JPanel();
         przyciski.setVisible(true);
-        przyciski.setLayout(new GridLayout(3,2));
+        przyciski.setLayout(new GridLayout(3,2, 50, 50));
 
         sidepanel.add(przyciski, BorderLayout.NORTH);
         przyciski.add(nextStepButton, BorderLayout.NORTH);
