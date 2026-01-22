@@ -22,9 +22,9 @@ public class ChartPanel extends JPanel {
 
     public void setStocksVisible(String symbol, boolean visible) {
         if(visible) {
-            this.setVisible(true);
+            hiddenStocks.remove(symbol);
         } else {
-            this.setVisible(false);
+            hiddenStocks.add(symbol);
         }
         repaint();
     }
@@ -43,9 +43,11 @@ public class ChartPanel extends JPanel {
 
         int maxPoints = 0;
         for(Stock s : stocks) maxPoints = Math.max(maxPoints, s.getPriceHistory().size());
+        if(maxPoints == 0) maxPoints = 10;
 
         double maxPrice = 0;
         for(Stock s : stocks) for(Double p : s.getPriceHistory()) if(p != null) maxPrice = Math.max(maxPrice, p);
+        if(maxPrice == 0) maxPrice = 100;
         maxPrice *= 1.2;
 
         int prefferedWidth = Math.max(800, maxPoints * xStep + MARGIN_LEFT + 50);
@@ -85,7 +87,9 @@ public class ChartPanel extends JPanel {
         Color[] colors = {Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.PINK, Color.YELLOW, Color.GRAY};
         int coloridx = 0;
         for(Stock s : stocks) {
-            drawStockLine(g2, s, colors[coloridx % colors.length], drawHeight, maxPrice);
+            if(isStockVisible(s.getSymbol())) {
+                drawStockLine(g2, s, colors[coloridx % colors.length], drawHeight, maxPrice);
+            }
             coloridx++;
         }
     }

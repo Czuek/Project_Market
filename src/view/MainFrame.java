@@ -18,6 +18,7 @@ public class MainFrame extends JFrame {
     private JPanel checkboxPanel;
 
     public MainFrame(List<Stock> stocks, Runnable onnextStep) {
+        this.stocks = stocks;
         this.nextstepAction = onnextStep;
 
         this.listModel = new DefaultListModel<>();
@@ -111,6 +112,7 @@ public class MainFrame extends JFrame {
 
         autogenerate.addActionListener(e -> automatycznedzialanie());
         setLocationRelativeTo(null);
+        refreshCheckBoxes();
         setVisible(true);
     }
 
