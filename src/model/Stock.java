@@ -20,8 +20,9 @@ public class Stock implements Subject {
         this.priceHistory = new ArrayList<>();
         this.priceHistory.add(startPrice);
         this.priceHistory.add(startPrice);
-        market.add(this);
     }
+
+
 
     public void dodajdoMarketu() {
         market.add(this);
@@ -35,31 +36,13 @@ public class Stock implements Subject {
         int liczba;
         if(r.nextFloat(1) < 0.45) { // czas zyskow
             System.out.println("Czas dobrej koniunktury");
-            liczba = 10;
-            /*
-            while(liczba-- > 0) {
-                this.currentPrice *= (0.959 + (0.1 * new Random().nextDouble()));
-            }
-            */
             this.currentPrice *= (0.96 + (0.1 * new Random().nextDouble()));
         } else if(r.nextFloat(1) <= 0.95) { // stagnacja
             System.out.println("Czas stagnacji");
-            /*
-            liczba = 10;
-            while(liczba-- > 0) {
-                this.currentPrice *= (0.95 + (0.1 * new Random().nextDouble()));
-            }
-             */
             this.currentPrice *= (0.95 + (0.1 * new Random().nextDouble()));
         } else { // recesja(mocna)
-            liczba = 10;
             System.out.println("Czas recesji");
-            /*
-            while(liczba-- > 0) {
-                this.currentPrice *= (0.871 + (0.1 * new Random().nextDouble()));
-            }
-             */
-            this.currentPrice *= (0.867 + (0.1 * new Random().nextDouble()));
+            this.currentPrice *= (0.87 + (0.1 * new Random().nextDouble()));
         }
 
         if(this.currentPrice < 0) this.currentPrice = 0;

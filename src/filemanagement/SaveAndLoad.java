@@ -2,21 +2,34 @@ package filemanagement;
 
 import model.Stock;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class SaveAndLoad {
 
     public static Stock loadStock(String filename) {
-        String[] companynamesplit = filename.split("_");
-        String companyname = (companynamesplit[0] + "_" + companynamesplit[1]).toUpperCase();
-        try(Scanner sc = new Scanner(filename)) {
+        File plik = new File(filename);
+        String nameonly = plik.getName();
+        String companyname = nameonly.split("_")[0].toUpperCase();
+        try(Scanner sc = new Scanner(plik)) {
+            if(!sc.hasNextLine()) return null;
             sc.nextLine();
-            String line = sc.nextLine();
-            if(line == null) return null;
-            String[] parts = line.split(",");
+
+            Stock stock = null;
+            double lastPrice = 0;
+
             while(sc.hasNextLine()) {
+                String line = sc.nextLine();
                 if(line.isEmpty()) continue;
-                if(parts.length >= 6) {
+
+                String[] parts = line.split(",");
+                if(parts.length < 5) continue;
+
+
+                String date = parts[0];
+                int year = Integer.parseInt(date.substring(0, 4));
+
+                if(year >= 2010) {
                     double openPrice = Double.parseDouble(parts[1]);
                     double minPrice = Double.parseDouble(parts[3]);
                     double maxPrice = Double.parseDouble(parts[2]);
@@ -24,12 +37,19 @@ public class SaveAndLoad {
 
                     double avgPrice = (openPrice + closePrice + minPrice + maxPrice) / 4;
 
-                    return new Stock(companyname, avgPrice);
+                    lastPrice = avgPrice;
+
+                    if(stock == null) stock = new Stock(companyname, avgPrice);
+                    else { stock.getPriceHistory().add(avgPrice);}
                 }
             }
+
+            if(stock != null) {
+                stock.setPrice(lastPrice);
+            }
+            return stock;
         } catch (Exception e) {
             return null;
         }
-        return null;
     }
 }

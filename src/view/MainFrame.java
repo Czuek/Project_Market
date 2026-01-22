@@ -83,13 +83,14 @@ public class MainFrame extends JFrame {
                     double price = Double.parseDouble(priceField.getText());
                     Stock s = new Stock(symbol, price);
 
-                    int currentStep = 0;
+                    int currentMaxSteps = 0;
                     for(Stock exist : stocks) {
-                        currentStep = Math.max(currentStep, exist.getPriceHistory().size());
+                        currentMaxSteps = Math.max(currentMaxSteps, exist.getPriceHistory().size());
                     }
 
                     s.getPriceHistory().clear();
-                    for(int i = 0; i < currentStep-1; i++) s.getPriceHistory().add(null);
+
+                    for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(null);
                     s.getPriceHistory().add(price);
                     stocks.add(s);
                     chartPanel.repaint();
@@ -107,13 +108,14 @@ public class MainFrame extends JFrame {
         listModel.add(0, text);
     }
 
-    public void wypelnijPola(String[] etykieta, JTextField[] pola, JPanel pnl) {
-        for(int i = 0; i < etykieta.length; i++) {
-            pnl.add(new JLabel(etykieta[i]));
-            pola[i] = new JTextField(15);
-            pnl.add(pola[i]);
+    public int getCurrentstep(List<Stock> stocks) {
+        int currentstep = 0;
+        for(Stock s : stocks) {
+            currentstep = Math.max(currentstep, s.getPriceHistory().size());
         }
+        return currentstep;
     }
+
 
     public void automatycznedzialanie() {
         Timer timer = new Timer(200, null);
