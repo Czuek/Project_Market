@@ -65,8 +65,7 @@ public class App {
 
             MainFrame view = new MainFrame(stocks, () -> {
                 for (Stock s : stocks) s.generatenewPrice();
-            }
-            );
+            }, registerBotStock);
 
             controller.setView(view);
 

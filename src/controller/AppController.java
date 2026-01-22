@@ -12,7 +12,7 @@ public class AppController {
     public void logBotDecision(String botName, String stockName, String decision) {
         if(view != null) {
             String msg = String.format("[%s] dla %s: %s", botName, stockName, decision);
-            view.addLog(msg);
+            view.updateBotLog(stockName, botName, decision);
         }
     }
 }
