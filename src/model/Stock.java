@@ -21,10 +21,20 @@ public class Stock implements Subject {
         this.priceHistory.add(startPrice);
     }
 
+    /*
+    public void dodajdoMarketu() {
+        market.add(this);
+    }
+
+    public int getMarketSize() {return market.size();}
+
+     */
+
+
     public void simulatePriceChange() {
         Random r = new Random();
         int liczba;
-        if(r.nextFloat(1) <= 0.45) { // czas zyskow
+        if(r.nextFloat(1) < 0.45) { // czas zyskow
             System.out.println("Czas dobrej koniunktury");
             liczba = 10;
             /*
@@ -32,7 +42,7 @@ public class Stock implements Subject {
                 this.currentPrice *= (0.959 + (0.1 * new Random().nextDouble()));
             }
             */
-            this.currentPrice *= (0.97 + (0.1 * new Random().nextDouble()));
+            this.currentPrice *= (0.96 + (0.1 * new Random().nextDouble()));
         } else if(r.nextFloat(1) <= 0.95) { // stagnacja
             System.out.println("Czas stagnacji");
             /*
@@ -51,7 +61,7 @@ public class Stock implements Subject {
             }
 
              */
-            this.currentPrice *= (0.85 + (0.1 * new Random().nextDouble()));
+            this.currentPrice *= (0.867 + (0.1 * new Random().nextDouble()));
         }
 
         if(this.currentPrice < 1) this.currentPrice = 1;

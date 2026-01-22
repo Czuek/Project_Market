@@ -26,7 +26,7 @@ public class ChartPanel extends JPanel {
         int maxPoints = 0;
         for(Stock s : stocks) maxPoints = Math.max(maxPoints, s.getPriceHistory().size());
 
-        int prefferedWidth = Math.max(600, maxPoints * xStep);
+        int prefferedWidth = Math.max(620, maxPoints * xStep + 20);
         if(getPreferredSize().width != prefferedWidth) {
             setPreferredSize(new Dimension(prefferedWidth, 300));
             revalidate();
@@ -59,6 +59,16 @@ public class ChartPanel extends JPanel {
             g.drawLine(x1, y1, x2, y2);
 
             g.fillOval(x1 - 2, y1 - 2, 4, 4);
+        }
+
+        if(!history.isEmpty()) {
+            int lastIdx = history.size() - 1;
+            int lastX = (int) (lastIdx * xStep);
+            int lastY = (int) (height - (history.get(lastIdx) / maxPrice * height));
+
+
+            g.setColor(color);
+            g.drawString(s.getSymbol(), lastX + 5, lastY);
         }
     }
 }

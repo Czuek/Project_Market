@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.List;
 import model.Stock;
 
@@ -40,9 +41,14 @@ public class MainFrame extends JFrame {
         nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
         nextStepButton.setBackground(new Color(119, 168, 119));
 
+        JButton dodajSpolke = new JButton("Dodaj spolke");
+        dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
+        dodajSpolke.setBackground(new Color(206, 149, 235));
+
+
         JButton autogenerate = new JButton("Automatycznie generuj");
-        nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
-        nextStepButton.setBackground(new Color(119, 168, 119));
+        autogenerate.setFont(new Font("Monospaced", Font.BOLD, 16));
+        autogenerate.setBackground(new Color(66, 209, 192));
 
         nextStepButton.addActionListener(e -> {
             clearLog();
@@ -57,10 +63,34 @@ public class MainFrame extends JFrame {
             });
         });
 
+        dodajSpolke.addActionListener(e -> {
+            JPanel panel = new JPanel(new GridLayout(2,2,5,5));
+            String[] etykiety = {"Symbol", "Cena"};
+            JTextField[] pola = new JTextField[2];
+            wypelnijPola(etykiety, pola, panel);
+            int wynik = JOptionPane.showConfirmDialog(null, panel, "Dodaj spolke", JOptionPane.OK_CANCEL_OPTION);
+
+            if(wynik == JOptionPane.OK_OPTION) {
+                try {
+                    Stock s = new Stock(pola[0].getText(), Double.parseDouble(pola[1].getText()));
+
+                } catch(NumberFormatException ex) {
+                }
+            }
+        });
+
+
+
         autogenerate.addActionListener(e -> automatycznedzialanie());
 
-        sidepanel.add(nextStepButton, BorderLayout.NORTH);
-        sidepanel.add(autogenerate, BorderLayout.SOUTH);
+        JPanel przyciski = new JPanel();
+        przyciski.setVisible(true);
+        przyciski.setLayout(new GridLayout(3,2));
+
+        sidepanel.add(przyciski, BorderLayout.NORTH);
+        przyciski.add(nextStepButton, BorderLayout.NORTH);
+        przyciski.add(dodajSpolke, BorderLayout.CENTER);
+        przyciski.add(autogenerate, BorderLayout.SOUTH);
 
         sidepanel.add(new JScrollPane(logList), BorderLayout.CENTER);
         add(sidepanel, BorderLayout.EAST);
@@ -69,8 +99,20 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+    private void operacjaDodajSpolke() {
+
+    }
+
     public void addLog(String text) {
         listModel.add(0, text);
+    }
+
+    public void wypelnijPola(String[] etykieta, JTextField[] pola, JPanel pnl) {
+        for(int i = 0; i < etykieta.length; i++) {
+            pnl.add(new JLabel(etykieta[i]));
+            pola[i] = new JTextField(15);
+            pnl.add(pola[i]);
+        }
     }
 
     public void automatycznedzialanie() {
