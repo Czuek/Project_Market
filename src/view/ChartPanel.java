@@ -3,17 +3,34 @@ package view;
 import model.Stock;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChartPanel extends JPanel {
     private List<Stock> stocks;
     private final int xStep = 30;
     private final int MARGIN_LEFT = 60;
+    private final int MARGIN_RIGHT = 60;
     private final int MARGIN_BOTTOM = 40;
+    private Set<String> hiddenStocks = new HashSet<String>();
 
     public ChartPanel(List<Stock> stocks) {
         this.stocks = stocks;
         this.setBackground(Color.WHITE);
+    }
+
+    public void setStocksVisible(String symbol, boolean visible) {
+        if(visible) {
+            this.setVisible(true);
+        } else {
+            this.setVisible(false);
+        }
+        repaint();
+    }
+
+    public boolean isStockVisible(String symbol) {
+        return !hiddenStocks.contains(symbol);
     }
 
     @Override
@@ -38,22 +55,31 @@ public class ChartPanel extends JPanel {
         }
 
         int drawHeight = this.getHeight() - MARGIN_BOTTOM;
+        int drawWidth = this.getWidth() - MARGIN_RIGHT;
+
+
         g2.setColor(Color.LIGHT_GRAY);
         for(int i = 0; i <= 5; i++) {
             int y = drawHeight - (int)(i * (drawHeight - 20) / 5.0);
-            g2.drawLine(MARGIN_LEFT, y, getWidth(), y);
+            g2.setColor(new Color(220,220,220));
+            g2.drawLine(MARGIN_LEFT, y, drawWidth, y);
+
             g2.setColor(Color.BLACK);
             g2.drawString(String.format("%.2f", (maxPrice / 5 ) * i), 5,y + 5);
-            g2.setColor(Color.LIGHT_GRAY);
         }
 
         g2.setColor(Color.BLACK);
-        g2.drawLine(MARGIN_LEFT, drawHeight, getWidth(), drawHeight);
+        g2.drawLine(MARGIN_LEFT, drawHeight, drawWidth, drawHeight);
         g2.drawLine(MARGIN_LEFT, 0, MARGIN_LEFT, drawHeight);
 
         for(int i = 0; i < maxPoints; i += 5) {
             int x = MARGIN_LEFT + i * xStep;
-            g2.drawString("Krok " + i, x - 15, drawHeight + 20);
+
+            g2.setColor(new Color(220,220,220));
+            g2.drawLine(x, 0, x, drawHeight);
+
+            g2.setColor(Color.BLACK);
+            g2.drawString("IDX " + i, x - 15, drawHeight + 20);
         }
 
         Color[] colors = {Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.PINK, Color.YELLOW, Color.GRAY};

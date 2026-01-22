@@ -14,6 +14,8 @@ public class MainFrame extends JFrame {
     private ChartPanel chartPanel;
     private JScrollPane chartScrollPane;
     private Runnable nextstepAction;
+    private List<Stock> stocks;
+    private JPanel checkboxPanel;
 
     public MainFrame(List<Stock> stocks, Runnable onnextStep) {
         this.nextstepAction = onnextStep;
@@ -22,7 +24,7 @@ public class MainFrame extends JFrame {
         this.logList = new JList<>(listModel);
 
         setTitle("Project Market");
-        setSize(1000, 600);
+        setSize(1000, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10,10));
 
@@ -31,7 +33,10 @@ public class MainFrame extends JFrame {
         chartScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         add(chartScrollPane, BorderLayout.CENTER);
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        JPanel topContainer = new JPanel();
+        topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         JButton nextStepButton = new JButton("Generuj nowe wartości");
         JButton dodajSpolke = new JButton("Dodaj spółkę");
         JButton autogenerate = new JButton("Automatycznie generuj");
@@ -40,11 +45,15 @@ public class MainFrame extends JFrame {
         dodajSpolke.setBackground(new Color(206, 149, 235));
         autogenerate.setBackground(new Color(66, 209, 192));
 
-        topPanel.add(nextStepButton);
-        topPanel.add(dodajSpolke);
-        topPanel.add(autogenerate);
+        buttonPanel.add(nextStepButton);
+        buttonPanel.add(dodajSpolke);
+        buttonPanel.add(autogenerate);
 
-        add(topPanel, BorderLayout.NORTH);
+        checkboxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+
+        topContainer.add(buttonPanel);
+        topContainer.add(checkboxPanel);
+        add(topContainer, BorderLayout.NORTH);
 
         nextStepButton.setFont(new Font("Monospaced", Font.BOLD, 16));
         dodajSpolke.setFont(new Font("Monospaced", Font.BOLD, 16));
@@ -93,6 +102,7 @@ public class MainFrame extends JFrame {
                     for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(null);
                     s.getPriceHistory().add(price);
                     stocks.add(s);
+                    refreshCheckBoxes();
                     chartPanel.repaint();
                 } catch(NumberFormatException ex) {
                 }
@@ -102,6 +112,18 @@ public class MainFrame extends JFrame {
         autogenerate.addActionListener(e -> automatycznedzialanie());
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void refreshCheckBoxes() {
+        checkboxPanel.removeAll();
+        for(Stock s : stocks) {
+            JCheckBox checkBox = new JCheckBox(s.getSymbol());
+            checkBox.setSelected(chartPanel.isStockVisible(s.getSymbol()));
+            checkBox.addActionListener(e -> chartPanel.setStocksVisible(s.getSymbol(), checkBox.isSelected()));
+            checkboxPanel.add(checkBox);
+        }
+        checkboxPanel.revalidate();
+        checkboxPanel.repaint();
     }
 
     public void addLog(String text) {
