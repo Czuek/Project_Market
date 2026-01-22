@@ -22,7 +22,7 @@ public class App {
         TradingBot sma = new TradingBot("Bot Powazna Analiza", new SMA_Strategy(), controller);
         TradingBot panic = new TradingBot("Bot Chaosu", new Panic_Strategy(), controller);
 
-        Consumer<Stock> registerBottoStock = (s) -> {
+        Consumer<Stock> registerBotStock = (s) -> {
             s.registerObserver(sma);
             s.registerObserver(panic);
         };
@@ -37,11 +37,11 @@ public class App {
         Stock s8 = new Stock("OIL", 160);
 
         stocks.add(s1);
-        registerBottoStock.accept(s1);
+        registerBotStock.accept(s1);
         stocks.add(s2);
-        registerBottoStock.accept(s2);
+        registerBotStock.accept(s2);
         stocks.add(s3);
-        registerBottoStock.accept(s3);
+        registerBotStock.accept(s3);
 
         MainFrame view = new MainFrame(stocks, () -> {
             for(Stock s : stocks) s.generatenewPrice();

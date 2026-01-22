@@ -33,6 +33,8 @@ public class MainFrame extends JFrame {
 
         add(chartScrollPane, BorderLayout.CENTER);
 
+
+
         JPanel sidepanel = new JPanel();
         sidepanel.setLayout(new BorderLayout());
         sidepanel.setPreferredSize(new Dimension(300, 0));
@@ -49,6 +51,15 @@ public class MainFrame extends JFrame {
         JButton autogenerate = new JButton("Automatycznie generuj");
         autogenerate.setFont(new Font("Monospaced", Font.BOLD, 16));
         autogenerate.setBackground(new Color(66, 209, 192));
+
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(nextStepButton);
+        buttonPanel.add(dodajSpolke);
+        buttonPanel.add(autogenerate);
+
+        JPanel logPanel = new JPanel(new BorderLayout());
+        logPanel.setBorder(BorderFactory.createTitledBorder("Decyzje Botów:"));
+        logPanel.add(new JScrollPane(logList), BorderLayout.CENTER);
 
         nextStepButton.addActionListener(e -> {
             clearLog();
@@ -97,10 +108,6 @@ public class MainFrame extends JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
-    }
-
-    private void operacjaDodajSpolke() {
-
     }
 
     public void addLog(String text) {
