@@ -81,7 +81,7 @@ public class ChartPanel extends JPanel {
             g2.drawLine(x, 0, x, drawHeight);
 
             g2.setColor(Color.BLACK);
-            g2.drawString("IDX " + i, x - 15, drawHeight + 20);
+            g2.drawString(String.format("%d", i), x - 15, drawHeight + 20);
         }
 
         Color[] colors = {Color.RED, Color.GREEN, Color.ORANGE, Color.BLUE, Color.MAGENTA, Color.CYAN, Color.PINK, Color.YELLOW, Color.GRAY};

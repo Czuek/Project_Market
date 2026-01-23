@@ -10,7 +10,6 @@ public class Stock implements Subject {
     private double currentPrice;
     private List<Double> priceHistory;
     private List<Observer> observers;
-    private Random random;
     private List<Stock> market = new ArrayList<>();
 
     public Stock(String symbol, double startPrice) {
@@ -21,7 +20,6 @@ public class Stock implements Subject {
         this.priceHistory.add(startPrice);
         this.priceHistory.add(startPrice);
     }
-
 
 
     public void dodajdoMarketu() {
