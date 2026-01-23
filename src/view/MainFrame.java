@@ -124,7 +124,7 @@ public class MainFrame extends JFrame {
 
                     s.getPriceHistory().clear();
 
-                    for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(null);
+                    for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(price);
                     s.getPriceHistory().add(price);
                     stocks.add(s);
 
