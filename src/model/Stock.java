@@ -25,7 +25,6 @@ public class Stock implements Subject {
     public void dodajdoMarketu() {
         market.add(this);
     }
-
     public int getMarketSize() {return market.size();}
     public List<Stock> getMarket() {return market;}
 
