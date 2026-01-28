@@ -55,6 +55,29 @@ public class MainFrame extends JFrame {
         JButton autogenerate = new JButton("Automatycznie generuj");
 
 
+        String[] options = {"Wszystkie(z przewijaniem)", "Ostatnie 100", "Ostatnie 1000"};
+        JComboBox<String> viewModeBox = new JComboBox<>(options);
+        viewModeBox.addActionListener(e -> {
+            int index =  viewModeBox.getSelectedIndex();
+            int limit = -1;
+            if(index == 1) limit = 100;
+            if(index == 2) limit = 1000;
+
+            chartPanel.setViewLimit(limit);
+
+            SwingUtilities.invokeLater(() -> {
+                chartScrollPane.revalidate();
+                chartScrollPane.repaint();
+                JScrollBar bar = chartScrollPane.getHorizontalScrollBar();
+                if(index == 0) {
+                    bar.setValue(bar.getMaximum());
+                } else {
+                    bar.setValue(0);
+                }
+            });
+        });
+
+
         nextStepButton.setBackground(new Color(119, 168, 119));
         dodajSpolke.setBackground(new Color(206, 149, 235));
         autogenerate.setBackground(new Color(66, 209, 192));
@@ -62,6 +85,8 @@ public class MainFrame extends JFrame {
         buttonPanel.add(nextStepButton);
         buttonPanel.add(dodajSpolke);
         buttonPanel.add(autogenerate);
+        buttonPanel.add(new JLabel("Widok:"));
+        buttonPanel.add(viewModeBox);
 
         checkboxPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
@@ -94,10 +119,12 @@ public class MainFrame extends JFrame {
 
             chartPanel.revalidate();
 
-            SwingUtilities.invokeLater(() -> {
-               JScrollBar horizontal = chartScrollPane.getHorizontalScrollBar();
-               horizontal.setValue(horizontal.getMaximum());
-            });
+            if(viewModeBox.getSelectedIndex() == 0){
+                SwingUtilities.invokeLater(() -> {
+                    JScrollBar horizontal = chartScrollPane.getHorizontalScrollBar();
+                    horizontal.setValue(horizontal.getMaximum());
+                });
+            }
         });
 
         dodajSpolke.addActionListener(e -> {
@@ -125,7 +152,7 @@ public class MainFrame extends JFrame {
 
                     s.getPriceHistory().clear();
 
-                    for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(price);
+                    for(int i = 0; i < currentMaxSteps-1; i++) s.getPriceHistory().add(null);
                     s.getPriceHistory().add(price);
                     stocks.add(s);
 
@@ -133,6 +160,7 @@ public class MainFrame extends JFrame {
                     refreshCheckBoxes();
                     stocksLogsContainer.revalidate();
                     stocksLogsContainer.repaint();
+                    chartPanel.revalidate();
                     chartPanel.repaint();
 
                 } catch(NumberFormatException ex) {
@@ -240,10 +268,11 @@ public class MainFrame extends JFrame {
 
                     chartPanel.revalidate();
                     JScrollBar horizontal = chartScrollPane.getHorizontalScrollBar();
-                    horizontal.setValue(horizontal.getMaximum());
+                    if(horizontal.isEnabled() && chartPanel.getViewLimit() == -1) {
+                        horizontal.setValue(horizontal.getMaximum());
+                    }
 
                     licznik--;
-
 
                 } else timer.stop();
             }
