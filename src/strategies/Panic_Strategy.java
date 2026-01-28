@@ -8,6 +8,7 @@ public class Panic_Strategy implements Strategy {
     public String analyze(String symbol, List<Double> history, double currentPrice) {
         if(history.size()<3) return "HOLD";
 
+        if(history.get(history.size()-3) == null) return "HOLD";
         double oldPrice = history.get(history.size()-3);
 
         if(currentPrice < oldPrice * 0.93) return "SELL";

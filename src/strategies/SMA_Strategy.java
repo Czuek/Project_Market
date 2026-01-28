@@ -10,7 +10,11 @@ public class SMA_Strategy implements Strategy {
         if(history.size() < period) return "HOLD";
 
         double sum = 0;
-        for(int i = history.size() - period; i < history.size(); i++) sum += history.get(i);
+        for(int i = history.size() - period; i < history.size(); i++) {
+            Double val = history.get(i);
+            if(val == null) return "HOLD";
+            sum += val;
+        }
 
         double average = sum / period;
 

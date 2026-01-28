@@ -59,7 +59,7 @@ public class ChartPanel extends JPanel {
         for(Stock s : stocks) {
             maxPoints = Math.max(maxPoints, s.getPriceHistory().size());
         }
-        int cwidth = maxPoints * defXStep + MARGIN_LEFT + 50;
+        int cwidth = maxPoints * defXStep + MARGIN_LEFT + 100;
         return new Dimension(Math.max(cwidth, 800), 400);
     }
 
@@ -116,7 +116,7 @@ public class ChartPanel extends JPanel {
         if(viewLimit > 100) gridStep = viewLimit / 10;
 
         Shape oClip = g2.getClip();
-        g2.setClip(MARGIN_LEFT, 0, drawWidth - MARGIN_LEFT, drawHeight);
+        g2.setClip(MARGIN_LEFT, 0, this.getWidth() - MARGIN_LEFT, drawHeight);
 
         for(int i = sIndex; i < maxPoints; i++ ) {
             if(i % gridStep == 0 || i == maxPoints - 1) {
@@ -155,6 +155,23 @@ public class ChartPanel extends JPanel {
         }
 
         g2.setClip(oClip);
+
+        g2.setClip(null);
+
+        int legendX = MARGIN_LEFT + 20;
+        int legendY = 30;
+        int lColoridx = 0;
+
+        for(Stock s : stocks) {
+            if(isStockVisible(s.getSymbol())) {
+                g2.setColor(colors[lColoridx % colors.length]);
+                g2.fillRect(legendX, legendY, 12, 12);
+                g2.setColor(Color.BLACK);
+                g2.drawString(s.getSymbol(), legendX + 18, legendY + 11);
+                legendX += 70;
+            }
+            lColoridx++;
+        }
     }
 
     private void drawStockLine(Graphics2D g, Stock s, Color color, int height, double maxPrice, int startIndex, double step) {
