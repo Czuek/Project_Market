@@ -34,9 +34,9 @@ public class App {
             Stock s3 = new Stock("ALPH", 50);
             Stock s4 = new Stock("TESL", 150);
             Stock s5 = SaveAndLoad.loadStock("amzn_us_d.csv");
-            Stock s6 = new Stock("ORACLE", 130);
-            Stock s7 = new Stock("FB", 140);
-            Stock s8 = new Stock("OIL", 160);
+            //Stock s6 = new Stock("ORACLE", 130);
+            //Stock s7 = new Stock("FB", 140);
+            //Stock s8 = new Stock("OIL", 160);
 
             if (s1 == null) s1 = new Stock("MSFT(fake)", 240);
             if (s2 == null) s2 = new Stock("AAPL(fake)", 160);
@@ -51,7 +51,7 @@ public class App {
             stocks.add(s5);
             registerBotStock.accept(s5);
 
-            Stock[] spolki = {s3, s4, s6, s7, s8};
+            Stock[] spolki = {s3, s4/*, s6, s7, s8*/};
             int targetSize = s1.getPriceHistory().size();
             for (Stock s : spolki) {
                 s.getPriceHistory().clear();

@@ -30,12 +30,12 @@ public class Stock implements Subject {
 
     public void simulatePriceChange() {
         Random r = new Random();
-        int liczba;
+        //int liczba;
         if(r.nextFloat(1) < 0.45) { // czas zyskow
-            System.out.println("Czas dobrej koniunktury");
+            System.out.println("Zyski");
             this.currentPrice *= (0.96 + (0.1 * new Random().nextDouble()));
         } else if(r.nextFloat(1) <= 0.95) { // stagnacja
-            System.out.println("Czas stagnacji");
+            System.out.println("Czas Strat");
             this.currentPrice *= (0.95 + (0.1 * new Random().nextDouble()));
         } else { // recesja(mocna)
             System.out.println("Czas recesji");

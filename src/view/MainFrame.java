@@ -54,6 +54,7 @@ public class MainFrame extends JFrame {
         JButton dodajSpolke = new JButton("Dodaj spółkę");
         JButton autogenerate = new JButton("Automatycznie generuj");
 
+
         nextStepButton.setBackground(new Color(119, 168, 119));
         dodajSpolke.setBackground(new Color(206, 149, 235));
         autogenerate.setBackground(new Color(66, 209, 192));
